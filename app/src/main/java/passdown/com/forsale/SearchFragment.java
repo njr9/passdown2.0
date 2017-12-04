@@ -95,7 +95,7 @@ public class SearchFragment extends Fragment {
                     }
                 }
                 if(postList.isEmpty()){
-                    Toast.makeText(getActivity(), "No results found.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "No results found!", Toast.LENGTH_SHORT).show();
                 }
                 PostList adapter = new PostList(getActivity(), postList);
                 listViewPosts.setAdapter(adapter);
