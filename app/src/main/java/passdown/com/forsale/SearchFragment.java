@@ -61,10 +61,12 @@ public class SearchFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot child : dataSnapshot.getChildren() ){
                     Toast.makeText(getActivity(), "testing"+child.getKey(), Toast.LENGTH_SHORT).show();
-                    for (DataSnapshot childPost : child.getChildren()){
-                        Post post = childPost.getValue(Post.class);
-                        if(post.getTitle().equalsIgnoreCase(search)){
-                            postList.add(post);
+                    for(DataSnapshot cpost : child.getChildren()) {
+                        for (DataSnapshot childPost : cpost.getChildren()) {
+                            //Post post = childPost.getValue(Post.class);
+                            //if(post.getTitle().equalsIgnoreCase(search)){
+                            //postList.add(post);
+                            //}
                         }
                     }
 
