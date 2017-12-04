@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -25,6 +26,8 @@ import passdown.com.forsale.models.Post;
 
 public class SearchFragment extends Fragment {
     private static final String TAG = "SearchFragment";
+    private EditText searchText;
+    private String search;
 
     ListView listViewPosts;
     List<Post> postList;
@@ -32,18 +35,22 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        searchText = view.findViewById(R.id.editText);
+
 
         listViewPosts = (ListView)view.findViewById(R.id.listViewPosts);
         postList = new ArrayList<>();
-        final EditText searchText = view.findViewById(R.id.editText);
-        final String text = searchText.getText().toString();
+
+
         Button mSearch = view.findViewById(R.id.Search);
         mSearch.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(isEmpty(text)){
-                    Toast.makeText(getActivity(), "searching", Toast.LENGTH_SHORT).show();
-                    search(text);
+                search = searchText.getText().toString();
+                if(!isEmpty(search)){
+                    search(search);
                 }else {
                     Toast.makeText(getActivity(), "you must fill out search", Toast.LENGTH_SHORT).show();
                 }
@@ -56,29 +63,48 @@ public class SearchFragment extends Fragment {
 
     public void search(final String search){
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot child : dataSnapshot.getChildren() ){
-                    Toast.makeText(getActivity(), "testing"+child.getKey(), Toast.LENGTH_SHORT).show();
-                    for(DataSnapshot cpost : child.getChildren()) {
-                        Toast.makeText(getActivity(), "testing"+cpost.getKey(), Toast.LENGTH_SHORT).show();
-                        for (DataSnapshot childPost : cpost.getChildren()) {
-                            Toast.makeText(getActivity(), "testing"+childPost.getKey(), Toast.LENGTH_SHORT).show();
-                            //Post post = childPost.getValue(Post.class);
-                            //if(post.getTitle().equalsIgnoreCase(search)){
-                            //postList.add(post);
-                            //}
-                        }
-                    }
+                postList.clear();
+                //Gets the List of Users
+                for(DataSnapshot Users : dataSnapshot.getChildren()) {
+                    //Gets a single Users
+                    for (DataSnapshot uid : Users.getChildren()) {
+                        //Gets the List of Books
+                        for (DataSnapshot posts : uid.getChildren()) {
+                            //Gets a single Book
+                            for (DataSnapshot book : posts.getChildren()) {
+                                Post post = new Post(book.child("post_id").getValue().toString(),
+                                        book.child("user_id").getValue().toString(),
+                                        book.child("title").getValue().toString(),
+                                        book.child("description").getValue().toString(),
+                                        book.child("price").getValue().toString(),
+                                        book.child("country").getValue().toString(),
+                                        book.child("state_province").getValue().toString(),
+                                        book.child("city").getValue().toString(),
+                                        book.child("contact_email").getValue().toString());
+                                if (post.getTitle().equalsIgnoreCase(search)) {
+                                    postList.add(post);
+                                }
+                            }
 
+                        }
+
+                    }
+                }
+                if(postList.isEmpty()){
+                    Toast.makeText(getActivity(), "No results found.", Toast.LENGTH_SHORT).show();
                 }
                 PostList adapter = new PostList(getActivity(), postList);
                 listViewPosts.setAdapter(adapter);
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {}
+            public void onCancelled(DatabaseError error) {
+
+            }
         });
 
     }
