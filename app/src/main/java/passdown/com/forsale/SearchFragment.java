@@ -62,7 +62,9 @@ public class SearchFragment extends Fragment {
                 for(DataSnapshot child : dataSnapshot.getChildren() ){
                     Toast.makeText(getActivity(), "testing"+child.getKey(), Toast.LENGTH_SHORT).show();
                     for(DataSnapshot cpost : child.getChildren()) {
+                        Toast.makeText(getActivity(), "testing"+cpost.getKey(), Toast.LENGTH_SHORT).show();
                         for (DataSnapshot childPost : cpost.getChildren()) {
+                            Toast.makeText(getActivity(), "testing"+childPost.getKey(), Toast.LENGTH_SHORT).show();
                             //Post post = childPost.getValue(Post.class);
                             //if(post.getTitle().equalsIgnoreCase(search)){
                             //postList.add(post);

@@ -90,7 +90,7 @@ public class PostFragment extends Fragment{
         Toast.makeText(getActivity(), "Uploading! Please wait...", Toast.LENGTH_SHORT).show();
 
         //Gets an instance of the users reference
-        DatabaseReference databaseUsers = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +
+        DatabaseReference databaseUsers = FirebaseDatabase.getInstance().getReference("Users/" + FirebaseAuth.getInstance().getCurrentUser().getUid() +
                 "/Posts/");
 
         //Gets a unique key for this specific post
