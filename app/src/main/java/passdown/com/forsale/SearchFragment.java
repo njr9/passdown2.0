@@ -29,12 +29,16 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        listViewPosts = (ListView)view.findViewById(R.id.listViewPosts);
-        postList = new ArrayList<>();
+        /*listViewPosts = (ListView)view.findViewById(R.id.listViewPosts);
+        postList = new ArrayList<>();*/
         return view;
     }
 
-    @Override
+    public void search(){
+
+    }
+
+    /*@Override
     public void onStart() {
         super.onStart();
 
@@ -61,5 +65,5 @@ public class SearchFragment extends Fragment {
 
             }
         });
-    }
+    }*/
 }
