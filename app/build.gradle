@@ -38,6 +38,8 @@ dependencies {
         ---------- Firebase -----------
      */
 
+    compile 'com.google.firebase:firebase-core:11.4.2'
+
     //Firebase Authentication
     compile 'com.google.firebase:firebase-auth:11.4.2'
 

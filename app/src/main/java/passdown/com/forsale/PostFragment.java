@@ -21,6 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import passdown.com.forsale.models.Post;
 import passdown.com.forsale.util.UniversalImageLoader;
 
@@ -82,21 +85,30 @@ public class PostFragment extends Fragment{
     }
 
     private void upload(){
+
+        //Displays a message that the post is currently being uploaded.
         Toast.makeText(getActivity(), "Uploading! Please wait...", Toast.LENGTH_SHORT).show();
 
-        final String postId = FirebaseDatabase.getInstance().getReference().push().getKey();
+        //Gets an instance of the users reference
+        DatabaseReference databaseUsers = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +
+                "/Posts/");
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference();
+        //Gets a unique key for this specific post
+        String postId = databaseUsers.push().getKey();
 
+        //Creates a new book posting
         Post post = new Post(postId,
                 FirebaseAuth.getInstance().getCurrentUser().getUid(),mTitle.getText().toString(),
                 mDescription.getText().toString(), mPrice.getText().toString(),
                 mCountry.getText().toString(), mStateProvince.getText().toString(),
                 mCity.getText().toString(), mContactEmail.getText().toString());
 
-        Task<Void> postRef = ref.child("posts").child(postId).setValue(post);
+        //Puts the information onto the database
+        databaseUsers.child(postId).setValue(post);
 
+        Toast.makeText(getActivity(), "Post complete!", Toast.LENGTH_SHORT).show();
+
+        resetFields();
     }
 
     private void resetFields(){
