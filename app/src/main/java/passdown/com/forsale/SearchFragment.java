@@ -34,7 +34,7 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    /*@Override
+    @Override
     public void onStart() {
         super.onStart();
 
@@ -61,5 +61,5 @@ public class SearchFragment extends Fragment {
 
             }
         });
-    }*/
+    }
 }
